@@ -6,10 +6,10 @@
 |Due |Wednesday, November 4, 9:00am |
 |Progress |[![Grade](../../actions/workflows/main.yml/badge.svg?branch=main)](../../actions/workflows/main.yml) |
 
-`alice.txt` holds Lewis Carroll's *Alice's Adventures in Wonderland*, from Project Gutenberg.
-Your program reads it, counts its words in a dictionary, answers questions about them, and
-writes what it found to two files. If a step confuses you, please ask about it while you are
-still in the room.
+Your program reads a book, counts its words in a dictionary, answers questions about them, and
+writes what it found to two files. You build it on `alice.txt`, Lewis Carroll's *Alice's
+Adventures in Wonderland*, then download a book you like from Project Gutenberg and analyze that
+one. If a step confuses you, please ask about it while you are still in the room.
 
 ## Course learning outcomes
 
@@ -23,7 +23,7 @@ integrated development environments (IDEs), command-line tools, and version cont
 
 Specifically, by the end of this activity you should be able to:
 
-* read a text file line by line
+* download a text file and read it line by line with `encoding="utf-8"`
 * split a line into words, and clean a word with `.lower()` and `.strip()`
 * count words in a dictionary
 * find the largest value in a dictionary with a loop
@@ -47,6 +47,8 @@ Your program asks three questions, reads the book, and ends with a book log:
 A word is a piece of a line from `.split()`, made lower case and stripped of the characters in
 `PUNCTUATION`, so `"Alice,` and `_Alice_` both count as `alice`. A piece that is empty after
 stripping, such as `--`, is not a word. A tie goes to the word that appears first in the book.
+`HEADING` at the top of `src/main.py` is the word that starts a chapter heading, `CHAPTER` for
+`alice.txt`.
 
 The program also writes two files. `report.txt` holds the same eight lines as the book log and
 is opened with `"w"`, so each run replaces it. `searches.txt` is opened with `"a"`, so each run
@@ -95,6 +97,26 @@ uv run python src/main.py
 Put your name on the `Author:` line at the top of the file, and delete each `TODO` marker as
 you finish that step.
 
+## Your own book
+
+Once the checks pass on `alice.txt`, analyze a book you choose:
+
+1. Find a book on [Project Gutenberg](https://www.gutenberg.org/), which holds over 75,000 free
+   books whose copyright has expired
+2. On the book's page, find the download formats, right-click **Plain Text**, and save the
+   linked file into the top folder of this repository, with a short name and no spaces, such as
+   `frankenstein.txt`
+3. Open the file in VS Code. Delete every line up to and including the one that starts with
+   `*** START OF`, and the table of contents if the book has one. Delete every line from the one
+   that starts with `*** END OF` to the end of the file. Those lines are Project Gutenberg's
+   notes and license, not the book
+4. In `src/main.py`, set `BOOK` to the file name, and `HEADING` to the first word of the book's
+   chapter headings as it is written there, such as `Chapter` or `LETTER`
+5. Run the program and look up a few words: a character's name, a place, a word the book is about
+
+The checks still run on `alice.txt` and the short book of their own, so they pass with your book
+in `BOOK`.
+
 ## Evaluation
 
 In-class activities are graded on completion and contribute to the **In-Class Activities**
@@ -124,12 +146,13 @@ wrong, what it said, what was expected, and the book that was used.
 ## Submitting
 
 Commit and push often. The last version pushed before the deadline is the one that gets
-graded.
+graded. Commit your book's file, and the `report.txt` and `searches.txt` from runs on it. Use
+your book's file name in place of `frankenstein.txt` below.
 
 **In the terminal:**
 
 ```text
-git add src/main.py
+git add src/main.py frankenstein.txt report.txt searches.txt
 git commit -m "Complete the rabbit hole activity"
 git push
 ```

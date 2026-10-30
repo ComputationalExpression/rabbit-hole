@@ -20,7 +20,7 @@ author.
 
 - Before explaining, ask what the student expects a line to do and what it does instead.
 - Explain in words: how `with open(...)` and a `for` loop read a file one line at a time,
-  what `.split()` makes of a line, what `.lower()` and `.strip(PUNCTUATION)` change about a
+  why the book is opened with `encoding="utf-8"`, what `.split()` makes of a line and why each long dash is replaced by a space first, what `.lower()` and `.strip(PUNCTUATION)` change about a
   word, why a word needs a count of 1 the first time and 1 more after that, how a loop with a
   best-so-far variable finds the largest count, and what `"w"` and `"a"` do to a file that is
   already there.
@@ -34,7 +34,7 @@ author.
   comparisons, `if`/`elif`/`else`, `and`/`or`/`not`, `for` and `while`, lists with `len` and
   `append`, functions with parameters and `return`, dictionaries with `d[key]`,
   `d[key] = value`, `len`, `in`, `not in` and `for key in d`, strings with `.upper()`,
-  `.lower()`, `.strip()` and `.split()`, files with `open`, `.readline()`, `.read()`,
+  `.lower()`, `.strip()`, `.split()` and `.replace()`, files with `open` (and `encoding="utf-8"`), `.readline()`, `.read()`,
   `.write()` and the modes `"w"` and `"a"`, and `print` with commas, `+`, or an f-string. Do
   not suggest `.get`, `.keys`, `.values`, `.items`, `del`, `pop`, `Counter`, `sorted`, `max`,
   `sum`, `enumerate`, `break`, `continue`, `try`/`except`, regular expressions, or

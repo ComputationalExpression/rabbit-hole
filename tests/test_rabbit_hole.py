@@ -8,7 +8,9 @@ and `print(f"Words: {words}")` all read the same.
 
 Most checks run your program on a short book written for the test as well as
 on alice.txt, so a number counted by hand and typed in passes only for the
-book it was counted from. Take every number from the file.
+book it was counted from. Take every number from the file. The checks always
+use alice.txt and the heading CHAPTER, whatever BOOK and HEADING say, so they
+still pass once you switch to a book of your own.
 
 The report and searches files are written to a temporary folder during the
 checks, so a run here never changes the files in your repository.
@@ -27,14 +29,15 @@ from main import main as run_main
 ALICE = Path(__file__).resolve().parent.parent / "alice.txt"
 
 # Seven lines, two of them chapter headings. CHAPTER on line five is not the
-# first word, so that line is not a heading, and "--" is not a word.
+# first word, so that line is not a heading, and "--" is not a word. The
+# curly quotes on the last line are what a Project Gutenberg book uses.
 SHORT = """CHAPTER I.
 The Cat and the Hat
 
 "The cat," said the Hat, "is a CAT!"
 a CHAPTER is not a headline
 CHAPTER II.
--- _Cat_ -- cat.
+-- _Cat_ -- \u201ccat.\u201d
 """
 
 
@@ -44,16 +47,17 @@ def run(capsys, tmp_path, book=None, search="cat", least=1, name="JJ"):
         path = ALICE
     else:
         path = tmp_path / "book.txt"
-        path.write_text(book)
-    original = main.BOOK, main.REPORT, main.SEARCHES
+        path.write_text(book, encoding="utf-8")
+    original = main.BOOK, main.HEADING, main.REPORT, main.SEARCHES
     main.BOOK = str(path)
+    main.HEADING = "CHAPTER"
     main.REPORT = str(tmp_path / "report.txt")
     main.SEARCHES = str(tmp_path / "searches.txt")
     try:
         with patch("builtins.input", side_effect=[name, search, str(least)]):
             run_main()
     finally:
-        main.BOOK, main.REPORT, main.SEARCHES = original
+        main.BOOK, main.HEADING, main.REPORT, main.SEARCHES = original
     out, err = capsys.readouterr()
     assert err == "", "the program wrote to the error stream:\n" + err
     return out

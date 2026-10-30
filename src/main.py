@@ -2,8 +2,10 @@
 
 CMPSC 100: Computational Expression, Activity 8
 
-Read Alice's Adventures in Wonderland from a text file, count its words in a
-dictionary, answer questions about them, and write what you found to files.
+Read a book from a text file, count its words in a dictionary, answer
+questions about them, and write what you found to files. Start with Alice's
+Adventures in Wonderland, then analyze a book of your own from Project
+Gutenberg.
 
 Your program should work for any book, so take every number it reports from
 the file itself rather than from a count made by hand.
@@ -11,13 +13,17 @@ the file itself rather than from a count made by hand.
 Author: TODO
 """
 
+# Change BOOK to the file name of your own book once the checks pass, and
+# HEADING to the first word of each chapter heading in it
 BOOK = "alice.txt"
+HEADING = "CHAPTER"
 REPORT = "report.txt"
 SEARCHES = "searches.txt"
 
 # The characters stripped from both ends of a word, so that "Alice," and
-# "_Alice_" both count as "alice"
-PUNCTUATION = ".,;:!?\"'()[]*_-"
+# "_Alice_" both count as "alice". Project Gutenberg books also use curly
+# quotes and long dashes, and many begin with an invisible marker, "\ufeff"
+PUNCTUATION = ".,;:!?\"'()[]*_-\u201c\u201d\u2018\u2019\u2014\ufeff"
 
 
 def main():
@@ -34,10 +40,13 @@ def main():
     # TODO 2: set `lines`, `chapters` and `words` to 0, and `counts` to an
     # empty dictionary
 
-    # TODO 3: open BOOK and loop over its lines. On every trip/iteration:
+    # TODO 3: open BOOK with encoding="utf-8" and loop over its lines. On
+    # every trip/iteration:
     # add 1 to `lines`
-    # split the line into a list of its words with .split()
-    # if that list is not empty and its first item is "CHAPTER", add 1 to
+    # split the line into a list of its words with
+    # line.replace("—", " ").split(). The replace turns each long dash into
+    # a space first, because a book can join two words with one
+    # if that list is not empty and its first item is HEADING, add 1 to
     # `chapters`
     # then loop over the list. Make each word lower case and strip
     # PUNCTUATION from it. If what is left is not "", add 1 to `words`, and

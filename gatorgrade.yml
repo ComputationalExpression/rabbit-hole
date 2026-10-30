@@ -40,7 +40,7 @@
   options:
     command: uv run pytest tests/test_rabbit_hole.py::test_the_searches_file_is_added_to
 
-- description: "[CODE] The book is read with open, and each count is stored under its word after an in or not in check"
+- description: "[CODE] The book is read with open and encoding utf-8, and each count is stored under its word after an in or not in check"
   check: ExecuteCommand
   options:
     command: uv run pytest tests/test_structure.py::test_words_are_counted_in_a_dictionary
