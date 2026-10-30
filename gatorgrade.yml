@@ -1,0 +1,59 @@
+# Ten checks: seven run your program, two read it as Python, and one reads its text.
+# The seven program checks read only the book log at the end of a run, or the files the run
+# wrote, and they forgive extra spaces, letter case, and a missing colon. Most of them run your
+# program on a short book written for the test as well as on alice.txt, so a number counted by
+# hand and typed in passes only for the book it was counted from. A loop that never ends fails
+# its check after five seconds.
+
+- description: "[READ] Lines counts every line of the file, blank ones too, and Chapters counts the lines whose first word is CHAPTER"
+  check: ExecuteCommand
+  options:
+    command: uv run pytest tests/test_rabbit_hole.py::test_counts_lines_and_chapters
+
+- description: "[COUNT] Words and Different words: each word is made lower case and stripped of PUNCTUATION, and a word left empty is skipped"
+  check: ExecuteCommand
+  options:
+    command: uv run pytest tests/test_rabbit_hole.py::test_words_are_cleaned_and_counted
+
+- description: "[COUNT] Times is the looked-up word's count, after making it lower case, or 0 when it is not a key"
+  check: ExecuteCommand
+  options:
+    command: uv run pytest tests/test_rabbit_hole.py::test_looks_up_a_word
+
+- description: "[BEST] Most common and Count: the word with the highest count among words with at least that many letters, or none and 0"
+  check: ExecuteCommand
+  options:
+    command: uv run pytest tests/test_rabbit_hole.py::test_most_common_word_with_enough_letters
+
+- description: "[BEST] Longest is the word with the most characters"
+  check: ExecuteCommand
+  options:
+    command: uv run pytest tests/test_rabbit_hole.py::test_longest_word
+
+- description: "[WRITE] The report file holds the same lines as the book log, and mode w starts it over on every run"
+  check: ExecuteCommand
+  options:
+    command: uv run pytest tests/test_rabbit_hole.py::test_the_report_file_is_written_over
+
+- description: "[WRITE] Each run adds one line to the searches file, the word and its count, and mode a keeps the earlier lines"
+  check: ExecuteCommand
+  options:
+    command: uv run pytest tests/test_rabbit_hole.py::test_the_searches_file_is_added_to
+
+- description: "[CODE] The book is read with open, and each count is stored under its word after an in or not in check"
+  check: ExecuteCommand
+  options:
+    command: uv run pytest tests/test_structure.py::test_words_are_counted_in_a_dictionary
+
+- description: "[CODE] The report is opened with mode w and the searches file with mode a"
+  check: ExecuteCommand
+  options:
+    command: uv run pytest tests/test_structure.py::test_files_are_written_with_w_and_a
+
+- src/main.py:
+  - description: "[CODE] No TODO markers remain: delete each TODO comment once its code is written, including Author"
+    check: MatchFileFragment
+    options:
+      fragment: TODO
+      count: 0
+      exact: true
