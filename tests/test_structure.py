@@ -50,11 +50,6 @@ def test_words_are_counted_in_a_dictionary():
         if isinstance(n.ctx, ast.Store) and isinstance(n.value, ast.Name)
     ]
     assert stores, "found no `counts[word] = ...`: each word's count is stored under the word as its key"
-    checks = [
-        n for n in nodes(ast.Compare)
-        if any(isinstance(op, (ast.In, ast.NotIn)) for op in n.ops)
-    ]
-    assert checks, "found no `in` or `not in` check: test whether a word is a key before adding 1 to it"
 
 
 def test_files_are_written_with_w_and_a():

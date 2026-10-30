@@ -9,8 +9,8 @@ and `print(f"Words: {words}")` all read the same.
 Most checks run your program on a short book written for the test as well as
 on alice.txt, so a number counted by hand and typed in passes only for the
 book it was counted from. Take every number from the file. The checks always
-use alice.txt and the heading CHAPTER, whatever BOOK and HEADING say, so they
-still pass once you switch to a book of your own.
+use alice.txt, whatever BOOK says, so they still pass once you switch to a book
+of your own.
 
 The report and searches files are written to a temporary folder during the
 checks, so a run here never changes the files in your repository.
@@ -28,9 +28,8 @@ from main import main as run_main
 
 ALICE = Path(__file__).resolve().parent.parent / "alice.txt"
 
-# Seven lines, two of them chapter headings. CHAPTER on line five is not the
-# first word, so that line is not a heading, and "--" is not a word. The
-# curly quotes on the last line are what a Project Gutenberg book uses.
+# "--" on the last line is not a word, and the curly quotes around the last
+# "cat" are what a Project Gutenberg book uses.
 SHORT = """CHAPTER I.
 The Cat and the Hat
 
@@ -48,16 +47,15 @@ def run(capsys, tmp_path, book=None, search="cat", least=1, name="JJ"):
     else:
         path = tmp_path / "book.txt"
         path.write_text(book, encoding="utf-8")
-    original = main.BOOK, main.HEADING, main.REPORT, main.SEARCHES
+    original = main.BOOK, main.REPORT, main.SEARCHES
     main.BOOK = str(path)
-    main.HEADING = "CHAPTER"
     main.REPORT = str(tmp_path / "report.txt")
     main.SEARCHES = str(tmp_path / "searches.txt")
     try:
         with patch("builtins.input", side_effect=[name, search, str(least)]):
             run_main()
     finally:
-        main.BOOK, main.HEADING, main.REPORT, main.SEARCHES = original
+        main.BOOK, main.REPORT, main.SEARCHES = original
     out, err = capsys.readouterr()
     assert err == "", "the program wrote to the error stream:\n" + err
     return out
@@ -90,16 +88,8 @@ def expect(capsys, tmp_path, label, want, book=None, **answers):
     assert got == str(want).upper(), f'the "{label}" line said {got}, expected {want} ({context})'
 
 
-def test_counts_lines_and_chapters(capsys, tmp_path):
+def test_words_are_counted(capsys, tmp_path):
     expect(capsys, tmp_path, "BOOK LOG", "JJ")
-    expect(capsys, tmp_path, "Lines", 3356)
-    expect(capsys, tmp_path, "Chapters", 12)
-    # A blank line is still a line, and a heading has CHAPTER as its first word.
-    expect(capsys, tmp_path, "Lines", 7, book=SHORT)
-    expect(capsys, tmp_path, "Chapters", 2, book=SHORT)
-
-
-def test_words_are_cleaned_and_counted(capsys, tmp_path):
     # "Cat", "cat," "CAT!" and "_Cat_" are all the word "cat", and "--" is no word.
     expect(capsys, tmp_path, "Words", 25, book=SHORT)
     expect(capsys, tmp_path, "Different words", 12, book=SHORT)
@@ -132,24 +122,19 @@ def test_most_common_word_with_enough_letters(capsys, tmp_path):
     expect(capsys, tmp_path, "Count", 27, least=10)
 
 
-def test_longest_word(capsys, tmp_path):
-    expect(capsys, tmp_path, "Longest", "headline", book=SHORT)
-    expect(capsys, tmp_path, "Longest", "waistcoat-pocket")
-
-
 def test_the_report_file_is_written_over(capsys, tmp_path):
     run(capsys, tmp_path, book=SHORT, search="cat")
     run(capsys, tmp_path, book=SHORT, search="dog")
     report = tmp_path / "report.txt"
     assert report.exists(), "no report file was written: open REPORT with \"w\" and write to it"
     text = report.read_text()
-    for label, want in [("Lines", 7), ("Words", 25), ("Times", 0), ("Most common", "CAT"), ("Longest", "HEADLINE")]:
+    for label, want in [("Words", 25), ("Different words", 12), ("Times", 0), ("Most common", "CAT"), ("Count", 5)]:
         got = value(text, label)
         assert got is not None, f'the report file has no "{label}" line'
         assert got == str(want), f'the report file\'s "{label}" line said {got}, expected {want}'
     # Two runs, and "w" starts the file over, so it holds one report.
-    lines = len(re.findall(r"^[ \t]*Lines\b", text, re.IGNORECASE | re.MULTILINE))
-    assert lines == 1, f"after two runs the report file has {lines} Lines lines, expected 1: open it with \"w\", not \"a\""
+    lines = len(re.findall(r"^[ \t]*Words\b", text, re.IGNORECASE | re.MULTILINE))
+    assert lines == 1, f"after two runs the report file has {lines} Words lines, expected 1: open it with \"w\", not \"a\""
 
 
 def test_the_searches_file_is_added_to(capsys, tmp_path):

@@ -1,34 +1,23 @@
-# Ten checks: seven run your program, two read it as Python, and one reads its text.
-# The seven program checks read only the book log at the end of a run, or the files the run
-# wrote, and they forgive extra spaces, letter case, and a missing colon. Most of them run your
-# program on a short book written for the test as well as on alice.txt, so a number counted by
-# hand and typed in passes only for the book it was counted from. A loop that never ends fails
-# its check after five seconds.
+# Eight checks: five run your program, two read it as Python, and one reads its text.
+# The five program checks read only the book log at the end of a run, or the files the run
+# wrote, and they forgive extra spaces, letter case, and a missing colon. They run your program
+# on a short book written for the test as well as on alice.txt, whatever BOOK says. A loop that
+# never ends fails its check after five seconds.
 
-- description: "[READ] Lines counts every line of the file, blank ones too, and Chapters counts the lines whose first word is CHAPTER"
+- description: "[COUNT] Words and Different words: every word from words_in(line) adds 1 to words and 1 to its count in counts"
   check: ExecuteCommand
   options:
-    command: uv run pytest tests/test_rabbit_hole.py::test_counts_lines_and_chapters
+    command: uv run pytest tests/test_rabbit_hole.py::test_words_are_counted
 
-- description: "[COUNT] Words and Different words: each word is made lower case and stripped of PUNCTUATION, and a word left empty is skipped"
-  check: ExecuteCommand
-  options:
-    command: uv run pytest tests/test_rabbit_hole.py::test_words_are_cleaned_and_counted
-
-- description: "[COUNT] Times is the looked-up word's count, after making it lower case, or 0 when it is not a key"
+- description: "[COUNT] Times is the looked-up word's count, or 0 when it is not a key of counts"
   check: ExecuteCommand
   options:
     command: uv run pytest tests/test_rabbit_hole.py::test_looks_up_a_word
 
-- description: "[BEST] Most common and Count: the word with the highest count among words with at least that many letters, or none and 0"
+- description: "[COUNT] Most common and Count come from counts: a word seen for the first time gets a count of 1"
   check: ExecuteCommand
   options:
     command: uv run pytest tests/test_rabbit_hole.py::test_most_common_word_with_enough_letters
-
-- description: "[BEST] Longest is the word with the most characters"
-  check: ExecuteCommand
-  options:
-    command: uv run pytest tests/test_rabbit_hole.py::test_longest_word
 
 - description: "[WRITE] The report file holds the same lines as the book log, and mode w starts it over on every run"
   check: ExecuteCommand
@@ -40,7 +29,7 @@
   options:
     command: uv run pytest tests/test_rabbit_hole.py::test_the_searches_file_is_added_to
 
-- description: "[CODE] The book is read with open and encoding utf-8, and each count is stored under its word after an in or not in check"
+- description: "[CODE] The book is read with open and encoding utf-8, and each count is stored under its word"
   check: ExecuteCommand
   options:
     command: uv run pytest tests/test_structure.py::test_words_are_counted_in_a_dictionary
