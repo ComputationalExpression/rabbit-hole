@@ -76,7 +76,7 @@ def main():
     # followed by "\n"
 
     # TODO 4: open SEARCHES with "a" and write one line: `search`, ": ", and
-    # `times`, followed by "\n"
+    # `times`, followed by "\n". `times` is a number, so use str(times)
 
     print()
     print("=" * 50)

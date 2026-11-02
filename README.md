@@ -32,13 +32,17 @@ Specifically, by the end of this activity you should be able to:
 The questions, the log, and two helper functions are provided in `src/main.py`:
 `words_in(line)` returns the words of a line in lower case without punctuation, and
 `most_common(counts, least)` returns the word with the highest count among words with at least
-`least` letters. You write four steps:
+`least` letters. You write four steps, each shown on the
+[Reading and Writing Text Files](https://computationalexpression.com/slides/week-11-session-1/) slides:
 
 1. Read `BOOK` line by line and count every word in the dictionary `counts`
+   (slides [2](https://computationalexpression.com/slides/week-11-session-1/#2), [4](https://computationalexpression.com/slides/week-11-session-1/#4) and [5](https://computationalexpression.com/slides/week-11-session-1/#5))
 2. Look up the word typed in, so `Times` is its count, or `0` when it is not a key
-3. Write the results to `report.txt` with `"w"`, so each run replaces it
+   (slide [6](https://computationalexpression.com/slides/week-11-session-1/#6))
+3. Write each string in `results` to `report.txt`, one per line, with `"w"`, so each run
+   replaces it (slide [7](https://computationalexpression.com/slides/week-11-session-1/#7))
 4. Add one line to `searches.txt` with `"a"`, so each run adds to its end: the word and its
-   count, such as `rabbit: 43`
+   count, such as `rabbit: 43` (slide [8](https://computationalexpression.com/slides/week-11-session-1/#8))
 
 ### Example run
 
@@ -75,21 +79,40 @@ you finish that step.
 
 ## Your own book
 
-Once the checks pass on `alice.txt`, analyze a book you choose:
+Once the checks pass on `alice.txt`, analyze a book you choose from
+[Project Gutenberg](https://www.gutenberg.org/), a library of over 75,000 free books whose
+copyright has expired.
 
-1. Find a book on [Project Gutenberg](https://www.gutenberg.org/), which holds over 75,000 free
-   books whose copyright has expired
-2. On the book's page, find the download formats, right-click **Plain Text**, and save the
-   linked file into the top folder of this repository, with a short name and no spaces, such as
+**Get the book:**
+
+1. Pick a book: search by title or author with the search box at the top of
+   [gutenberg.org](https://www.gutenberg.org/), or browse
+   [Top 100 EBooks yesterday](https://www.gutenberg.org/browse/scores/top)
+2. On the book's page, under **Download for free**, click **Plain Text**. The book opens in your
+   browser as plain text
+3. In VS Code, right-click in the Explorer below the files of this repository (not inside
+   `src`), choose **New File...**, and name it with a short name and no spaces, such as
    `frankenstein.txt`
-3. Open the file in VS Code. Delete every line up to and including the one that starts with
-   `*** START OF`, and every line from the one that starts with `*** END OF` to the end of the
-   file. Those lines are Project Gutenberg's notes and license, not the book
-4. In `src/main.py`, set `BOOK` to the file name
-5. Run the program and look up a few words: a character's name, a place, a word the book is about
+4. In the browser, choose **Edit**, then **Select All**, then **Edit**, then **Copy**. In VS Code,
+   click inside your new file, choose **Edit**, then **Paste**, then **File**, then **Save**
 
-The checks still run on `alice.txt` and the short book of their own, so they pass with your book
-in `BOOK`.
+**Trim it:** the file starts and ends with Project Gutenberg's notes and license, which are not
+part of the book.
+
+5. Click on line 1, then hold Shift and click the line that starts with `*** START OF`. Press
+   Delete
+6. Click the line that starts with `*** END OF`, then hold Shift and click the last line of the
+   file. Press Delete, then save
+
+**Analyze it:**
+
+7. In `src/main.py`, change `BOOK = "alice.txt"` to your file name, such as
+   `BOOK = "frankenstein.txt"`
+8. Run the program and look up a few words: a character's name, a place, a word the book is
+   about. Each run replaces `report.txt` and adds a line to `searches.txt`
+
+The checks always test your program on `alice.txt` and on a short book of their own, whatever
+`BOOK` says, so they still pass after this change.
 
 ## Evaluation
 
